@@ -40,3 +40,33 @@ const weight = [1, 3, 4];
 const value = [15, 20, 30];
 const size = 4;
 console.log(testWeightBagProblem(weight, value, size));
+
+
+/**
+ * 一维dp数组(滚动数组)
+ * 1. dp数组的定义
+ *    dp[j]：容量为j的背包 所背的物品价值最大值
+ * 2. 递推公式
+ *    dp[j-weight[i]]表示容量为j-weight[i]的背包所背的最大价值
+ *    dp[j-weight[i]] + value[i] 表示容量为j-weight[i]的背包加上物品i的价值
+ *    此时dp[j]有两个选择：1是取自己dp[j] 相当于二维数组的dp[i-1][j] 即不放入物品i 2是取dp[j-weight[i]] + value[i] 即放入物品i
+ *    dp[j] = Math.max(dp[j],dp[j-weight[i]]+value[i])
+ * 3. dp数组初始化
+ *    dp[0]应该是0，因为背包容量为0所背的物品的最大价值就是0
+ *    根据递推公式 dp数组在推导的时候一定是取价值最大的数 如果题目给的价值都是正整数 那么非0下标都初始化为0就可以了
+ */
+
+function testWeightBagProblem1(
+  weight: number[],
+  value: number[],
+  size: number
+): number {
+  const goodsNum:number = weight.length
+  const dp:number[] = new Array(size+1).fill(0)
+  for(let i = 0; i < goodsNum; i++){
+    for(let j = size; j >= weight[i]; j--){
+      dp[j] = Math.max(dp[j],dp[j-weight[i]]+value[i])
+    }
+  }
+  return dp[size]
+}
